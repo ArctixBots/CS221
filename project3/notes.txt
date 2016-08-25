@@ -1,0 +1,10 @@
+Notes
+
+mys01, mys05 has stepping pattern, resizing?
+
+mys02 n^2
+
+mys03, mys06 has multiple linear slopes
+
+mys02 is really slow,  n^2 performance, unsorted probably
+

@@ -1,0 +1,432 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>
+CPSC 221, 2015W1: Programming Project 1
+</title>
+</head>
+<body>
+<center>
+<h2>
+CPSC 221, 2015W1<br>
+Programming Project 1<br>
+Universal Puzzle Solver<br>
+</h2>
+<h3>
+Milestone Due: 9PM Mon 2015-Sep-28
+Final Submission Due: 9PM Mon 2015-Oct-5
+</h3>
+</center>
+
+
+<h3>Objectives</h3>
+
+<ul>
+<li>Get used to building C++ programs in our UBC environment.</li>
+<li>Work through the details of stack and queue implementations.</li>
+<li>Understand depth-first-search (DFS) and breadth-first-search (BFS).</li>
+<li>Solve some fun puzzles!</li>
+</ul>
+
+<h3>Overview</h3>
+
+<p>
+Stacks and queues are powerful tools for storing and accessing
+data. In particular, these data structures are at the heart of two of
+the most important algorithms in computer science: depth first search
+(DFS) and breadth first search (BFS).
+<!--
+Priority Queues are slightly
+more complicated and slightly less common, but are also widely used.
+In our project, they are used to implement the heuristic-based best-first search
+(BestFS) algorithm.
+-->
+</p>
+
+<p>
+Searching is an extremely general approach to solving problems.
+We systematically explore possible solutions until we find
+one that works.  Thanks to the speed of the computer (and efficient
+algorithms like what you learn in 221!), search is able to solve
+a wide range of important, practical problems.  In this project (and
+the next one),
+we'll develop some reusable code that lets us solve a wide
+range of puzzles, with only a small amount of coding needed
+to add a new puzzle type.</p>
+
+<p>
+Of course, these are all just fun puzzles, but similar approaches
+have solved problems like route-finding in mapping systems or
+providing responsive control for space probes too far from Earth for
+direct control (among <strong>many</strong> others).
+</p>
+
+<p>
+For starters, we are providing you
+with code to solve the
+classic
+<a href="http://en.wikipedia.org/wiki/Fox,_goose_and_bag_of_beans_puzzle"> Wolf-Goat-Cabbage problem</a>,
+<a href="http://en.wikipedia.org/wiki/Sudoku">Sudoku</a>,
+<a href="https://en.wikipedia.org/wiki/Peg_solitaire">Peg Solitaire</a>,
+and the general <a href="http://en.wikipedia.org/wiki/Sliding_puzzle">Slider Puzzle</a>
+of which the <a href="http://en.wikipedia.org/wiki/Fifteen_puzzle">15-puzzle</a>
+is the most famous variant.
+We've also given you a simple maze explorer, to help you visualize
+the different search algorithms.
+We may add a few more puzzles if we have time.
+</p>
+
+<p>
+(If you are unfamiliar with these puzzles, there are many on-line implementations.
+Here's <a href="http://mypuzzle.org/sliding">one for the sliding puzzles</a>,
+<a href="http://www.websudoku.com/">one for Sudoku</a>,
+and <a href="http://www.neok12.com/games/peg-solitaire/peg-solitaire.htm">
+one for peg solitaire</a>.  BTW, beware of spending too much time playing
+the puzzles!)
+</p>
+
+<p>
+DFS involves following a sequence of moves as far
+as we can go, until we get stuck.
+When this occurs, the search backtracks to its most recent choice and
+tries a different path instead.
+</p>
+
+<p>
+BFS proceeds differently: it tries moves in order of their discovery,
+beginning at the starting point of the search.  First it tries all
+moves available from the starting point, then it tries all moves
+available starting from where those first moves end, i.e., &quot;two
+steps away&quot;.  It continues in the same fashion from there until a
+solution is found.  Because of this, BFS has the nice property that it
+will discover the shortest path to a solution, in terms of the number
+of moves taken to reach the solution.  (It has the nasty property that
+it will visit every closer state of the puzzle along the way.)
+</p>
+
+<!--
+<p>
+Best First Search uses a function that assigns a priority or quality to each
+state.
+It explores the state that is one step away from a previously explored state
+that is the most promising or highest priority.
+This hopefully helps guide the search to explore possibilities that
+are more likely to lead to a solution quickly.
+</p>
+-->
+
+<p>
+The algorithms for DFS and BFS work very
+similarly, but they are based on different data structures.
+DFS is based on a stack, because you're always returning to the most
+recent choice you made (so it's last-in-first-out); and BFS is based on
+a queue, because you are always exploring states in the order in which
+you discover them (first-in-first-out).
+Let's use "bag" to refer to the "stack" or "queue", so
+we can use 
+"put in " to refer to the operation that puts something into the bag: "push",
+or "enqueue";
+and we'll use
+"take out" to refer to the operation that takes something out of
+the bag: "pop", or "dequeue".
+Now we can describe DFS and BFS using the same algorithm.
+</p>
+
+<p>
+Both algorithms begin by adding the initial puzzle state
+to the bag of active states.
+Then, until the bag is empty or a solution is found,
+they take a state out of the bag.  If that state has not
+already been explored (i.e., previously removed from the bag),
+they find the possible next states (after one move) and put each one of these
+children into the bag.
+</p>
+
+<p>
+Note that except in special cases (like Sudoku), we need a second
+data structure in addition to the bag.  This is a dictionary ADT
+(which we'll study soon in the course)
+that keeps track of what states we have explored during our search.  We don't
+want the algorithm to re-explore any state (this wastes effort and might lead
+to infinite loops).
+In addition, for many puzzles, we don't want to see just the solution;
+we also want to see the sequence of moves that led from the initial
+state to the solution.  If we use the dictionary to store for
+each state the parent state from which we arrived at the state,
+then once we find a solution, we can follow these parents backwards
+and find the sequence of states that led to the solution.  Note that
+this dictionary will be used <b>a LOT</b> during the search, so it
+should be efficient.
+</p>
+
+
+<h3>Assignment</h3> 
+
+<p>
+Note that this assignment has two stages:  a <b>Milestone</b>, which
+is due earlier, and the <b>Final Submission</b>.
+The milestone is meant to be easy, but it requires you to get the files
+and get them to compile and run, which can sometimes take a <b>long</b>
+time if you run into technical difficulties.
+<b>So be sure to get started as soon as possible, so you can
+get help if needed!</b>  Directions for what and how to submit your
+milestone and final submission are below.
+(Why this milestone?  Because in the past,
+a lot of folks waited until so late that they never managed to compile
+the code in time, and they ended up getting zeroes on the assignment!)
+</p>
+<p>
+For this assignment, you will try solving puzzles with
+the active states bag being a stack or a queue.
+We have provided two implementations of the
+stack ADT (which you can use as examples to help you with
+your programming).  You must implement the queue ADT using
+a circular array (and supporting dynamic resizing) as well as using
+a linked list.
+</p>
+
+<p>
+You will use your implementations, and the ones that we have supplied,
+to experiment with solving a variety of puzzles.
+In particular, you will test your code by using the
+supplied <code>solve.cpp</code> program, along with its associated files.
+(However, note that just as you were taught in 110 and 210, it's important
+that your code actually implement the Queue ADT, so you should write
+your own unit tests.)
+</p><p>
+You also must answer some questions in the MILESTONE1.txt and
+HANDIN.txt files.
+</p><p>
+<strong>Important implementation constraints:</strong> In your
+circular array queue implementation, you must use regular C++ arrays.
+You <strong>may not</strong> use
+<code>std::vector</code> or other classes that directly support
+resizing. (We want you to learn how to do it yourself!)  We have
+provided a simple, bare-bones linked-list node type and an example of
+using it in the LinkedListStack implementation.  You are free to use
+this for LinkedListQueue, or you may implement your own linked list
+structure. You may <strong>not</strong> use
+<code>std::list</code> (which is implemented as a linked list) or any
+other linked list libraries.
+<!--
+For the priority queue, you <strong>may
+not</strong> use <code>std::priority_queue</code> or any other heap
+implementations; you must implement your own. However, you are allowed
+(and strongly encouraged) to use <code>std::vector</code> in your heap
+implementation to make resizing the heap easy.
+-->
+</p><p>
+
+<strong>Important marking constraints:</strong> We will mark your code
+semi-automatically.  Therefore, you must ensure that your code will
+compile and link correctly by simply running <code>make</code> on the
+ugrad Linux servers, <b>with our supplied Makefile</b>.
+Also, your code <b>must respect the supplied interface types,
+with no modifications</b>.
+
+</p><p>
+
+You are responsible for deallocating any memory that you
+allocate.  (The rule of thumb is: if you create something
+with <code>new</code>, you should destroy it with <code>delete</code>
+when you've finished with it.  If you used <code>new</code> with
+brackets to make an array, use <code>delete []</code> rather than
+just <code>delete</code>.)
+
+</p><p>
+
+<b>Teams</b>
+</p><p> 
+
+You may work on a team of at most two on this assignment, subject to
+the course's <a href="../syllabus.shtml#conduct">Academic Conduct
+policy</a>, and we <strong>strongly</strong> encourage that you do so. We
+recommend that you work (literally) together as much as
+possible. You must: (1) document each team member's effort in
+the <code>HANDIN.txt</code> file; (2) work together on
+and <em>both</em> understand your <code>HANDIN.txt</code>; (3)
+understand how your team's code is structured and why it
+works. Remember to test your team's code as an integrated whole!
+Except in extreme cases, all team members will receive the same grade
+for the project.  Check
+out <a href="http://collaboration.csc.ncsu.edu/laurie/Papers/Kindergarten.PDF">All
+I Need to Know about Pair Programming I Learned in Kindergarten</a>
+for advice on working in a pair.
+</p><p>
+<b>What we've provided</b>
+</p><p>
+As a starting point we've provided some files:
+    </p><dl>
+    <dt><u>Makefile</u></dt>
+
+    <dd><!-- (This, and much of this write-up, is courtesy of Steve Wolfman.) -->
+    The command <code>make</code> will use this to build your
+    program. You <strong>should not need</strong> to modify the
+    makefile, even if you add new <code>.cpp</code>
+    and <code>.hpp</code> files.  <strong>DO NOT MISS</strong> the
+    following commands: 
+    <code>make handin-milestone1</code> hands in your Milestone.
+    Run it early and
+    often so you're not late.
+    <code>make
+    handin-proj1</code> hands in your final project 1 submission (run
+    early and often).  <b>These commands must be executed on our
+    undergrad linux servers, in a directory that contains the
+    Makefile, and
+    the relevant MILESTONE1.txt, HANDIN.txt, and various .cpp and .hpp
+    files you wish to hand in.</b></dd>
+
+
+
+    <dt><u>MILESTONE1.txt, HANDIN.txt</u></dt>
+
+    <dd>Key documentation files for your milestone and final submissions.  Read
+      these and fill in the TODO items!  Also, answer the questions there.</dd>
+
+
+    <dt><u>solve.cpp</u></dt>
+
+    <dd>This is the main code that solves the puzzles.
+    You will edit this code to choose what kind of puzzle to solve,
+    set up the initial configuration, and select which search strategy
+    and dictionary implementation to use.
+    Initially, <strong>you'll just make a few changes to it to
+    explore the different search algorithms</strong>.
+    Later, you'll <strong>alter it so it uses your
+    data structures rather than ours</strong>.</dd>
+
+    <dt><u>BagOfPuzzleStates.hpp</u></dt>
+
+    <dd>This defines the abstract type which your stack and queue
+    must implement. You can look at the provided
+    implementations of the ArrayStack and LinkedListStack
+    to see how to do this. <strong>Your
+    queue, and priority queue classes must be subclasses of
+    BagOfPuzzleStates</strong>.<!--  (Feel free to add layers of abstraction that
+    group the queues, stacks, and priority queues if you'd like.)--></dd>
+	<dd><strong>Warning</strong>: Don't go about inserting logic for
+	  depth-first, breadth-first, or best-first search into your code.
+	  It's entirely unnecessary.
+	The searches use the *same* algorithm; the only difference is a
+	different underlying data structure for the active states. </dd>
+
+    <dt><u>ArrayStack.hpp, ArrayStack.cpp</u></dt>
+
+    <dd>An implementation of a stack using a (resizable) array. Study
+    it carefully and use it as a guide to implement the rest of your
+    data structures! It will especially be useful for your array-based
+    queue.</dd>
+ 	<dd><strong>Warning:</strong> your <code>ensure_capacity</code>
+    for the queue will necessarily look somewhat different from the
+    one in this file!  </dd>
+
+    <dt><u>LinkedListStack.hpp, LinkedListStack.cpp</u></dt>
+
+    <dd>An implementation of a stack using a linked list. Study it
+    carefully and use it as a guide to implement the rest of your
+    data structures! It will especially be useful for your linked-list
+    queue.</dd>
+
+    <dt><u>PredDict.hpp</u></dt>
+
+    <dd>This defines the abstract type which the dictionary must
+    implement.</dd>
+
+    <dt><u>LinkedListDict.hpp, LinkedListDict.cpp</u></dt>
+
+    <dd>A naive implementation of a dictionary that scans the
+    list for each <code>find</code> operation.</dd>
+
+    <dt><u>LinkedListQueue.hpp, LinkedListQueue.cpp</u></dt>
+
+    <dd>Skeleton code for the linked list queue files. <strong>Implement
+    it!</strong></dd>
+
+    <dt><u>ArrayQueue.hpp, ArrayQueue.cpp</u></dt>
+    
+    <dd>Skeleton code for an array-based queue class. <strong>Implement
+    it!</strong></dd>
+
+    <dt><u>PuzzleState.hpp</u></dt>
+
+    <dd>An abstract class to represent a puzzle configuration.</dd>
+
+    <dt><u>WolfGoatCabbage.*, Sudoku.*, Marble.*, SliderPuzzle.*, etc.</u></dt>
+    
+    <dd>Code that implements the <code>PuzzleState</code> interface,
+    and lets us solve different puzzles using the same code for
+    the rest of the program.</dd>
+
+    </dl>
+
+All provided files can be found in the project directory:
+<blockquote><tt>~cs221/assignments/project1</tt></blockquote>
+<small>(This is also called <tt>/home/c/cs221/assignments/project1</tt>.)</small>
+<p>
+<strong>Copy them all into your ugrad directory by changing directory (using
+the <code>cd</code> command) into your project1 directory and running:
+</p><blockquote><tt>cp -R ~cs221/assignments/project1/* .</tt></blockquote>
+(Be sure to include the final period in that command, which represents "the
+current directory".)</strong></p>
+
+<!--
+<p>
+<strong>Or copy them all to your own machine by changing to the directory you want to copy to on your machine and running: </p><blockquote><tt>scp -r username@remote.ugrad.cs.ubc.ca:~cs221/assignments/project1 .</tt></blockquote> where username is your cs username.</strong> -->
+
+<p>
+Type <code>make</code> in that directory, and then run the
+<code>solve</code> program.  Start playing with <code>solve.cpp</code>.
+</p>
+
+<p>
+<b>Outputting a solution</b><br>
+</p>
+
+<p>
+You should use the
+existing print routines to produce your output or risk losing credit
+in the automated portion of the marking.
+
+<p>
+<b>Milestone Handin</b>
+</p><p> This project includes a <b>milestone, due before the final
+deadline</b>.  For this milestone, submit your
+completed <code>MILESTONE1.txt</code> file, as directed in that file.
+</p>
+<p> Turn your file in
+electronically <a href="../programming.shtml#handin">using <code>handin</code></a>,
+ by running <strong>make handin-milestone1</strong> in a
+directory that contains the relevant files (MILESTONE1.txt).
+(As noted above, you must run this on our ugrad Linux servers, in the
+appropriate directory.)
+</p><p>
+<b>Final Submission</b>
+</p><p>
+You are required to hand in your project1 directory with your implementation
+of the ADTs.
+Included in this directory should be at least
+these files:
+</p><ul>
+<li>LinkedListQueue.{hpp,cpp}, ArrayQueue.{hpp,cpp},
+</li><li>Your completed HANDIN.txt file
+</li></ul> 
+<p>
+You should not need to hand in changes to any other files in the project.
+</p><p> Turn your files in
+electronically <a href="../programming.shtml#handin">using <code>handin</code></a>,
+by running <strong>make handin-proj1</strong>.
+(As noted above, you must run this on our ugrad Linux servers, in the
+appropriate directory.)
+</p><p>
+</ul>
+
+<hr>Last updated: <b>2015-09-21 23:13:39 cs221</b>
+
+<!-- Local Variables: -->
+<!-- time-stamp-line-limit: -20 -->
+<!-- time-stamp-start: "Last updated: [<]b[>]" -->
+<!-- time-stamp-end: "[<]/b[>]" -->
+<!-- End: -->
+
+
+
+</body></html>

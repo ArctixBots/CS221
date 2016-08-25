@@ -1,0 +1,71 @@
+Student Name #1: Tristan Rice
+Student ugrad login #1: q7w9a
+
+Student Name #2: TODO:
+Student ugrad login #2: TODO:
+
+Team name (for fun!): TODO:
+
+Acknowledgment that you understand and have followed the course's
+collaboration policy
+(http://www.ugrad.cs.ubc.ca/~cs221/current/syllabus.shtml#conduct):
+
+Tristan Rice
+
+TODO: submit using: make handin-proj1
+
+----------------------------------------------------------------------
+
+Approximate hours on project: TODO:
+
+----------------------------------------------------------------------
+
+For teams, rough breakdown of work: TODO:
+
+----------------------------------------------------------------------
+
+Acknowledgment of assistance: TODO:
+
+----------------------------------------------------------------------
+
+Questions:
+
+For the explanations, generally a sentence or two should be enough.
+Type your answers directly in this file.
+
+
+1.  Edit solve.cpp to use your queue classes to solve the MazeRunner
+puzzle.  Set a large delay in the solvePuzzle function (like 1000000).
+Do you see why this is called breadth-first search (BFS)?
+How many steps long was your solution?  How does this compare with
+the length of the solution (the number of steps) using DFS?
+
+TODO:
+
+2.  Try to solve the blank Sudoku board using your ArrayQueue
+and LinkedListQueue classes.  What happens?
+
+TODO:
+
+3.  Switch to the medium-difficulty Sudoku problem, and comment
+out the delay and the print statements in the solvePuzzle function.
+How long does it take to solve the puzzle using your ArrayQueue
+class?  Using your LinkedListQueue class?  Is the difference big?
+
+TODO:
+
+5.  Edit solve.cpp to switch to English Peg Solitaire.  Try solving
+this with the faster of your ArrayQueue or LinkedListQueue classes
+(based on your answer to #3).  What happens?
+
+TODO:
+
+6.  Edit solve.cpp to switch to the 3x3 slider puzzle.  Try solving
+this with the faster of your ArrayQueue or LinkedListQueue classes
+(based on your answer to #3).  What happens?
+
+TODO:
+
+----------------------------------------------------------------------
+
+We will be checking your implementations of ArrayQueue, and LinkedListQueue.

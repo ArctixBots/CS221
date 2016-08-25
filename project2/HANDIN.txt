@@ -1,0 +1,116 @@
+Student Name #1: Tristan Rice
+Student ugrad login #1: q7w9a
+
+Acknowledgment that you understand and have followed the course's
+collaboration policy
+(http://www.ugrad.cs.ubc.ca/~cs221/current/syllabus.shtml#conduct):
+
+Tristan Rice
+
+TODO: submit using: make handin-proj2
+
+----------------------------------------------------------------------
+
+Approximate hours on project: 7?
+
+----------------------------------------------------------------------
+
+For teams, rough breakdown of work: all me
+
+----------------------------------------------------------------------
+
+Acknowledgment of assistance: no
+
+----------------------------------------------------------------------
+
+Questions:
+
+For the explanations, generally a sentence or two should be enough.
+Type your answers directly in this file.
+
+
+1.  Edit solve.cpp to use the 3x3 Slider Puzzle and the LinkedListDict
+for seenStates.  Comment out the usleep call and cout statements.
+What is the runtime when you use StdStack for activeStates?
+When you use StdQueue for activeStates?  (These will take several minutes.)
+Notice that these are MUCH faster than in Project 1, because I have
+improved LinkedListDict, but your code will make things run even faster!
+
+StdStack:
+./solve  238.97s user 0.39s system 98% cpu 4:03.46 total
+
+StdQueue:
+./solve  1008.22s user 0.05s system 100% cpu 16:47.54 total
+
+
+2.  Now, change the code to use FixedChainHashDict with size 1000.
+What are the runtimes, and how many steps long was the solution found,
+using StdStack and StdQueue?
+You can now see the trade-off of DFS vs. BFS.
+And you should see the huge gain of hashing.
+
+StdStack:
+./solve  13.77s user 0.83s system 78% cpu 18.590 total
+48431 steps
+
+StdQueue:
+./solve  53.03s user 0.08s system 99% cpu 53.120 total
+31 steps
+
+3.  Repeat Q2 with ResizeChainHashDict.  (What are runtimes and steps, etc.?)
+What is the average number of
+collision chain nodes examined per call to find?
+
+StdStack:
+./solve  2.38s user 0.75s system 43% cpu 7.152 total
+48431 steps
+Probe Statistics for find():
+0: 179071
+1: 18442
+2: 1539
+3: 96
+4: 5
+5: 0
+Average chain nodes examined was 1.1096243 (generally just the first).
+
+StdQueue:
+./solve  5.14s user 0.05s system 99% cpu 5.195 total
+31 steps
+Probe Statistics for find():
+0: 435814
+1: 44381
+2: 3374
+3: 184
+4: 12
+5: 0
+Average chain nodes examined was 1.10693 (generally just the first).
+
+4.  Now, edit solve.cpp to go back to using LinkedListDict, but switch
+to HeapPriorityQueue.  Try running the program with the usleep and
+cout commands enabled.  Do you see what BestFS is doing?  (Either yes or
+no is fine, but it's fun to try to see what's happening.)  Then,
+comment out the usleep and cout statements and time this.  How long
+did it take?  You should really see the advantage of BestFS!
+
+Yes, it's processing states that are closest to completion.
+./solve  0.01s user 0.00s system 72% cpu 0.018 total
+
+5.  With your new data structures, the 3x3 slider puzzle has become
+too easy!  You can try the 4x4 slider puzzle if you'd like, but then
+switch to the 5x5 slider puzzle.  Make sure you are using HeapPriorityQueue.
+How long does this take if you use LinkedListDict?  FixedChainHashDict
+with size 1000?  ResizeChainHashDict?  Are you impressed?
+
+LinkedListDict:
+doesn't complete
+
+FixedChainHashDict:
+./solve  235.55s user 0.67s system 97% cpu 4:02.82 total
+
+ResizeChainHashDict:
+./solve  37.30s user 0.18s system 99% cpu 37.571 total
+
+----------------------------------------------------------------------
+
+We will be checking your implementations of HeapPriorityQueue,
+FixedChainHashDict, and ResizeChainHashDict.

@@ -1,0 +1,73 @@
+Student Name #1: Tristan Rice
+Student ugrad login #1: q7w9a
+
+Student Name #2: TODO:
+Student ugrad login #2: TODO:
+
+Acknowledgment that you understand and have followed the course's collaboration policy
+(http://www.ugrad.cs.ubc.ca/~cs221/current/syllabus.shtml#conduct):
+
+Tristan Rice
+
+TODO: submit using: make handin-milestone1
+(Run that from one of the UBC ugrad computers, after you have transfered
+your files there and tested to make sure they work correctly on our systems.)
+
+----------------------------------------------------------------------
+
+Questions:
+
+For the explanations, generally a sentence or two should be enough.
+Type your answers directly in this file.
+
+0.  Compile the program (using make).  What puzzle does it solve?
+
+It solves the Wolf-Goat-Cabbage problem.
+
+1.  Edit solve.cpp to solve the MazeRunner problem, and set the code
+to declare activeStates as ArrayStack or LinkedListStack.  (You should
+only comment out one line and uncomment one line to do that.)
+Do you see why it's called depth-first search (DFS)?
+Yes. It completes a path before trying a different branch.
+
+(If not, you can increase the delay in the usleep call to slow down
+the animation.)
+How many steps long was the solution it found?
+Using LinkedListStack, it was 59 steps.
+Does it make a difference whether you use ArrayStack or LinkedListStack?
+Both take the same amount of steps since they exhibit the same behavior externally.
+
+2.  Edit solve.cpp to solve the empty Sudoku board.
+What solution do you get?
+
+STEP 82:
+  9 8 7 6 5 4 3 2 1
+  6 5 4 3 2 1 9 8 7
+  3 2 1 9 8 7 6 5 4
+  8 9 6 7 4 5 2 1 3
+  7 4 5 2 1 3 8 9 6
+  2 1 3 8 9 6 7 4 5
+  5 7 9 4 6 8 1 3 2
+  4 6 8 1 3 2 5 7 9
+  1 3 2 5 7 9 4 6 8
+
+3.  Next, edit solve.cpp to switch to peg solitaire game (the class
+is called Marble).  Run it to completion with the usleep delay set to 10000.
+How long does that take on your computer?  Now, comment out the
+usleep command as well as the two lines before it.  Now how long does it
+take to solve?  (This is why we'll comment these out when we solve
+harder puzzles.)
+
+usleep(10000)
+./solve  0.28s user 0.04s system 2% cpu 11.455 total
+
+//usleep(10000)
+./solve  0.15s user 0.01s system 32% cpu 0.490 total
+
+4.  Edit solve.cpp to switch to the 3x3 slider puzzle.  Make sure
+the usleep and print statements in solvePuzzle are still commented out.
+Try solving the 3x3 slider puzzle.  What happens?  Why?
+
+It never completes since the termination case is it being solved, but it is unsolvable.
+
+----------------------------------------------------------------------
